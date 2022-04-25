@@ -21,9 +21,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> globalExceptionHandling(Exception e, WebRequest request) {
     List<String> details = new ArrayList<>();
-
-    // Not show for client
     details.add(e.getLocalizedMessage());
+
+    // ErrorDetails errorDetails = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, e, "Server Error",
+    //     HttpStatus.INTERNAL_SERVER_ERROR.value(), details,
+    //     ZonedDateTime.now(ZoneId.of("Z")));
 
     ErrorDetails errorDetails = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, "Server Error",
         HttpStatus.INTERNAL_SERVER_ERROR.value(), details,
@@ -41,6 +43,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus.NOT_FOUND.value(), details,
         ZonedDateTime.now(ZoneId.of("Z")));
     return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+  }
+
+  // Handle when resource already exist
+  @ExceptionHandler(ResourceAlreadyExistException.class)
+  public ResponseEntity<Object> resourceAlreadyExistHandling(ResourceAlreadyExistException e, WebRequest request) {
+    List<String> details = new ArrayList<>();
+    details.add(e.getLocalizedMessage());
+
+    ErrorDetails errorDetails = new ErrorDetails(HttpStatus.CONFLICT, "Resource already exists",
+        HttpStatus.CONFLICT.value(), details,
+        ZonedDateTime.now(ZoneId.of("Z")));
+    return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
   }
 
   // Handle for method POST and PUT, validate arguments in body

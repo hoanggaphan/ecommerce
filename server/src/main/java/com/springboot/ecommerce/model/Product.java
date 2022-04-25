@@ -46,7 +46,7 @@ public class Product {
 
   @NotBlank(message = "{field.notBlank}")
   @Size(max = 2000, message = "{string.maxSize2000}")
-  @Column(name = "img_default", length = 2000, nullable = false, unique = true)
+  @Column(name = "img_default", length = 2000, nullable = false)
   private String imgDefault;
 
   @NotNull(message = "{field.notBlank}")
@@ -67,7 +67,7 @@ public class Product {
   private Collection<Variant> variants;
 
   // 1 product có nhiều image
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval=true)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private Collection<Image> images;
