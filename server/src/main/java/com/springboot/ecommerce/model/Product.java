@@ -67,7 +67,7 @@ public class Product {
   private Collection<Variant> variants;
 
   // 1 product có nhiều image
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval=true)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private Collection<Image> images;

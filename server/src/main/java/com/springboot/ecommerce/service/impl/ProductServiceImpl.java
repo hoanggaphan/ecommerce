@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   public Product getProduct(String slug) {
-    Optional<Product> optionalProduct = productRepository.findBySlug(slug);
+    Optional<Product> optionalProduct = productRepository.findBySlugIgnoreCase(slug);
 
     if (optionalProduct.isPresent()) {
       return optionalProduct.get();
@@ -79,13 +79,13 @@ public class ProductServiceImpl implements ProductService {
   }
 
   public Product createProduct(Product product) {
-    Optional<Product> optionalProductSlug = productRepository.findBySlug(product.getSlug());
+    Optional<Product> optionalProductSlug = productRepository.findBySlugIgnoreCase(product.getSlug());
 
     if (optionalProductSlug.isPresent()) {
       throw new ResourceAlreadyExistException("Product", "slug", product.getSlug());
     }
 
-    Optional<Product> optionalProductName = productRepository.findByName(product.getName());
+    Optional<Product> optionalProductName = productRepository.findByNameIgnoreCase(product.getName());
 
     if (optionalProductName.isPresent()) {
       throw new ResourceAlreadyExistException("Product", "name", product.getName());
@@ -104,20 +104,20 @@ public class ProductServiceImpl implements ProductService {
   }
 
   public Product updateProduct(Long id, Product product) {
-    Product productInDB = productRepository.findById(id)
+    productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
-    product.setId(id);
 
-    Optional<Product> optProduct = Optional.of(productInDB);
-
-    if (optProduct.get().getSlug().equals(product.getSlug())) {
-      throw new ResourceAlreadyExistException("Product", "slug",
-          product.getSlug());
+    Optional<Product> optionalProductSlug = productRepository.findBySlugIgnoreCaseAndIdNot(product.getSlug(),
+        id);
+        
+    if (optionalProductSlug.isPresent()) {
+      throw new ResourceAlreadyExistException("Product", "slug", product.getSlug());
     }
 
-    if (optProduct.get().getName().equals(product.getName())) {
-      throw new ResourceAlreadyExistException("Product", "name",
-          product.getName());
+    Optional<Product> optionalProductName = productRepository.findByNameIgnoreCaseAndIdNot(product.getName(), id);
+
+    if (optionalProductName.isPresent()) {
+      throw new ResourceAlreadyExistException("Product", "name", product.getName());
     }
 
     // Update images
@@ -127,6 +127,8 @@ public class ProductServiceImpl implements ProductService {
       images.add(imgItem);
     }
     product.setImages(images);
+
+    product.setId(id);
 
     return productRepository.save(product);
   }
