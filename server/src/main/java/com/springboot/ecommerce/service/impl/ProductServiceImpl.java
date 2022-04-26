@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.springboot.ecommerce.dto.ProductDto;
+import com.springboot.ecommerce.exception.ImageNullException;
 import com.springboot.ecommerce.exception.ResourceAlreadyExistException;
 import com.springboot.ecommerce.exception.ResourceNotFoundException;
 import com.springboot.ecommerce.model.Image;
@@ -91,14 +92,18 @@ public class ProductServiceImpl implements ProductService {
       throw new ResourceAlreadyExistException("Product", "name", product.getName());
     }
 
-    List<Image> images = new ArrayList<>();
-    for (Image imgItem : product.getImages()) {
-      Image image = new Image();
-      image.setUrl(imgItem.getUrl());
-      image.setProduct(product);
-      images.add(image);
+    if (product.getImages() != null) {
+      // throw new ImageNullException();
+      List<Image> images = new ArrayList<>();
+      for (Image imgItem : product.getImages()) {
+        Image image = new Image();
+        image.setUrl(imgItem.getUrl());
+        image.setProduct(product);
+        images.add(image);
+      }
+      product.setImages(images);
     }
-    product.setImages(images);
+    
 
     return productRepository.save(product);
   }
@@ -109,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
 
     Optional<Product> optionalProductSlug = productRepository.findBySlugIgnoreCaseAndIdNot(product.getSlug(),
         id);
-        
+
     if (optionalProductSlug.isPresent()) {
       throw new ResourceAlreadyExistException("Product", "slug", product.getSlug());
     }
@@ -118,6 +123,10 @@ public class ProductServiceImpl implements ProductService {
 
     if (optionalProductName.isPresent()) {
       throw new ResourceAlreadyExistException("Product", "name", product.getName());
+    }
+
+    if (product.getImages() == null) {
+      throw new ImageNullException();
     }
 
     // Update images
