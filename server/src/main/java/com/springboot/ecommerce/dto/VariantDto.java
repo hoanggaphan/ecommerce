@@ -28,7 +28,7 @@ public class VariantDto {
   @NotNull(message = "{field.notBlank}")
   private Boolean isDefault;
 
-  @JsonIgnoreProperties("options")
+  @JsonIgnoreProperties("variants")
   private ProductDto product;
 
   private Collection<VariantAttribute> options;

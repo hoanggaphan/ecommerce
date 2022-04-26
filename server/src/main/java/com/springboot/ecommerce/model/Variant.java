@@ -47,7 +47,7 @@ public class Variant {
   @Column(name = "is_default", columnDefinition = "boolean default false", nullable = false)
   private Boolean isDefault = false;
 
-  // Nhiều dạng sku thuộc 1 product.
+  // Nhiều dạng thuộc 1 product.
   @NotNull(message = "{field.notBlank}")
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false) // thông qua khóa ngoại product_id
