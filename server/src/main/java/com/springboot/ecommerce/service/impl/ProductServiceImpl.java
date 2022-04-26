@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.springboot.ecommerce.dto.ProductDto;
-import com.springboot.ecommerce.exception.ImageNullException;
+import com.springboot.ecommerce.exception.MessageInternalException;
 import com.springboot.ecommerce.exception.ResourceAlreadyExistException;
 import com.springboot.ecommerce.exception.ResourceNotFoundException;
 import com.springboot.ecommerce.model.Image;
@@ -103,7 +103,6 @@ public class ProductServiceImpl implements ProductService {
       }
       product.setImages(images);
     }
-    
 
     return productRepository.save(product);
   }
@@ -126,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     if (product.getImages() == null) {
-      throw new ImageNullException();
+      throw new MessageInternalException("Image can't null");
     }
 
     // Update images

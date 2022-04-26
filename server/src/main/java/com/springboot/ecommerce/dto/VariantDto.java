@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.springboot.ecommerce.model.VariantAttribute;
 
 import lombok.Data;
 
@@ -31,5 +30,5 @@ public class VariantDto {
   @JsonIgnoreProperties("variants")
   private ProductDto product;
 
-  private Collection<VariantAttribute> options;
+  private Collection<VariantAttributeDto> options;
 }
