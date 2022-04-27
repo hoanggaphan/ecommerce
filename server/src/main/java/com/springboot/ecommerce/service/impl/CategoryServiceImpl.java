@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryImpl implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
   private final CategoryRepository categoryRepository;
 
   public List<Category> getAllCategories() {

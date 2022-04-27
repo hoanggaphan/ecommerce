@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -81,7 +80,7 @@ public class User {
   @Enumerated(EnumType.STRING)
   private Gender gender = Gender.male;
 
-  @NotNull(message = "field.notBlank")
+  // @NotNull(message = "field.notBlank")
   @Column(length = 10, columnDefinition = "varchar(10) default 'user'", nullable = false)
   @Enumerated(EnumType.STRING)
   private Role role = Role.user;
