@@ -3,7 +3,7 @@ package com.springboot.ecommerce.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.springboot.ecommerce.domain.Role;
+import com.springboot.ecommerce.model.Role;
 
 import lombok.Data;
 
@@ -17,5 +17,5 @@ public class UserPassDto {
   @Size(max = 32, message = "{string.maxSize32}")
   private String password;
 
-  private Role role;
+  private Role roles;
 }

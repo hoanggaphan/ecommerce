@@ -1,6 +1,7 @@
 package com.springboot.ecommerce.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
@@ -8,17 +9,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.springboot.ecommerce.domain.Gender;
-import com.springboot.ecommerce.domain.Role;
+import com.springboot.ecommerce.enums.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +41,7 @@ public class User {
   @NotBlank(message = "{field.notBlank}")
   @Size(max = 32, message = "{string.maxSize32}")
   @Column(length = 32, nullable = false, unique = true)
-  private String account;
+  private String username;
 
   @NotBlank(message = "{field.notBlank}")
   @Size(max = 32, message = "{string.maxSize32}")
@@ -79,10 +81,14 @@ public class User {
   @Enumerated(EnumType.STRING)
   private Gender gender = Gender.male;
 
+  @ManyToMany(fetch = FetchType.EAGER)
+  private Collection<Role> roles = new ArrayList<>();
+
   // @NotNull(message = "field.notBlank")
-  @Column(length = 10, columnDefinition = "varchar(10) default 'user'", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Role role = Role.user;
+  // @Column(length = 10, columnDefinition = "varchar(10) default 'user'",
+  // nullable = false)
+  // @Enumerated(EnumType.STRING)
+  // private Role role = Role.user;
 
   // 1 user có nhiều đơn đặt hàng
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

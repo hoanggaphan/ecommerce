@@ -6,7 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.springboot.ecommerce.domain.Gender;
+import com.springboot.ecommerce.enums.Gender;
 
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class UserDto {
 
   @NotBlank(message = "{field.notBlank}")
   @Size(max = 32, message = "{string.maxSize32}")
-  private String account;
+  private String username;
 
   @Size(max = 100, message = "{string.maxSize100}")
   private String firstName;

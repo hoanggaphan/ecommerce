@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.springboot.ecommerce.domain.Status;
+import com.springboot.ecommerce.enums.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

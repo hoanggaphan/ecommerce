@@ -1,4 +1,4 @@
-package com.springboot.ecommerce.domain;
+package com.springboot.ecommerce.enums;
 
 public enum Status {
   pending,

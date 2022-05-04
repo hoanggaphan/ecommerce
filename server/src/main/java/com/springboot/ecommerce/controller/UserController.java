@@ -41,9 +41,9 @@ public class UserController {
         .collect(Collectors.toList());
   }
 
-  @GetMapping("/{id}")
-  public UserDto getUser(@PathVariable("id") Long id) {
-    return modelMapper.map(userService.getUser(id), UserDto.class);
+  @GetMapping("/{username}")
+  public UserDto getUser(@PathVariable("username") String username) {
+    return modelMapper.map(userService.getUser(username), UserDto.class);
   }
 
   // Register
