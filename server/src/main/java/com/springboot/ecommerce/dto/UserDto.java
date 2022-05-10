@@ -1,12 +1,14 @@
 package com.springboot.ecommerce.dto;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.springboot.ecommerce.enums.Gender;
+import com.springboot.ecommerce.model.Role;
 
 import lombok.Data;
 
@@ -40,4 +42,6 @@ public class UserDto {
   private String address2;
 
   private Gender gender;
+
+  private Collection<Role> roles;
 }

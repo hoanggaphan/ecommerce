@@ -23,9 +23,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     List<String> details = new ArrayList<>();
     details.add(e.getLocalizedMessage());
 
-    // ErrorDetails errorDetails = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, e, "Server Error",
-    //     HttpStatus.INTERNAL_SERVER_ERROR.value(), details,
-    //     ZonedDateTime.now(ZoneId.of("Z")));
+    // ErrorDetails errorDetails = new
+    // ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, e, "Server Error",
+    // HttpStatus.INTERNAL_SERVER_ERROR.value(), details,
+    // ZonedDateTime.now(ZoneId.of("Z")));
 
     ErrorDetails errorDetails = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, "Server Error",
         HttpStatus.INTERNAL_SERVER_ERROR.value(), details,

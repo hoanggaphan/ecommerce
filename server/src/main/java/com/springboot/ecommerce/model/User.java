@@ -1,7 +1,6 @@
 package com.springboot.ecommerce.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
@@ -13,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
@@ -35,7 +36,6 @@ import lombok.ToString;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
   private Long id;
 
   @NotBlank(message = "{field.notBlank}")
@@ -44,8 +44,7 @@ public class User {
   private String username;
 
   @NotBlank(message = "{field.notBlank}")
-  @Size(max = 32, message = "{string.maxSize32}")
-  @Column(length = 32, nullable = false)
+  @Column(nullable = false)
   private String password;
 
   @Size(max = 100, message = "{string.maxSize100}")
@@ -82,7 +81,10 @@ public class User {
   private Gender gender = Gender.male;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  private Collection<Role> roles = new ArrayList<>();
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Collection<Role> roles;
 
   // @NotNull(message = "field.notBlank")
   // @Column(length = 10, columnDefinition = "varchar(10) default 'user'",
