@@ -32,7 +32,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
       throws ServletException, IOException, IllegalArgumentException {
-    if (req.getServletPath().equals("/api/v1/login")) {
+    if (req.getServletPath().equals("/api/login")) {
       filterChain.doFilter(req, res);
     } else {
       String authorizationHeader = req.getHeader(HttpHeaders.AUTHORIZATION);

@@ -49,12 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-    customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
+    customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
     http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-    http.authorizeRequests().antMatchers("/api/v1/login").permitAll();
+    http.authorizeRequests().antMatchers("/api/login/**").permitAll();
 
     http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyAuthority("ROLE_USER",
         "ROLE_MANAGER", "ROLE_ADMIN", "ROLE_SUPER_ADMIN");
@@ -74,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring()
+        .antMatchers("/api/token/refresh/**")
         .antMatchers(HttpMethod.GET, "/api/v1/categories/**")
         .antMatchers(HttpMethod.GET, "/api/v1/products/**")
         .antMatchers(HttpMethod.GET, "/api/v1/variants/**")
