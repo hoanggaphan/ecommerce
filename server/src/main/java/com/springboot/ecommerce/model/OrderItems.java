@@ -35,11 +35,11 @@ public class OrderItems {
   @JoinColumn(name = "variant_id")
   private Variant variant;
 
-  @NotNull(message = "field.notBlank")
+  @NotNull(message = "qty.notBlank")
   @Column(nullable = false)
   private int qty;
 
-  @NotNull(message = "field.notBlank")
+  @NotNull(message = "orderedPrice.notBlank")
   @Column(name = "ordered_price", nullable = false)
   private double orderedPrice;
 }

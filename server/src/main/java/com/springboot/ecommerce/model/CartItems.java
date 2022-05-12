@@ -25,7 +25,7 @@ public class CartItems {
   @EmbeddedId
   private CartItemsId ids;
 
-  @NotNull(message = "field.notBlank")
+  @NotNull(message = "qty.notBlank")
   @Column(nullable = false)
   private int qty;
 

@@ -30,25 +30,24 @@ public class Variant {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{sku.notBlank}")
   @Size(max = 100, message = "{string.maxSize100}")
   @Column(length = 100, nullable = false, unique = true)
   private String sku;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{originalPrice.notBlank}")
   @Column(name = "original_price", columnDefinition = "double default 0", nullable = false)
   private double originalPrice = 0;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{qty.notBlank}")
   @Column(columnDefinition = "integer default 0", nullable = false)
   private int qty = 0;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{isDefault.notBlank}")
   @Column(name = "is_default", columnDefinition = "boolean default false", nullable = false)
   private Boolean isDefault = false;
 
   // Nhiều dạng thuộc 1 product.
-  @NotNull(message = "{field.notBlank}")
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false) // thông qua khóa ngoại product_id
   @EqualsAndHashCode.Exclude

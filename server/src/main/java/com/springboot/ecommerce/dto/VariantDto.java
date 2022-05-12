@@ -14,17 +14,17 @@ import lombok.Data;
 public class VariantDto {
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{sku.notBlank}")
   @Size(max = 100, message = "{string.maxSize100}")
   private String sku;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{originalPrice.notBlank}")
   private double originalPrice;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{qty.notBlank}")
   private int qty;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{isDefault.notBlank}")
   private Boolean isDefault;
 
   @JsonIgnoreProperties("variants")

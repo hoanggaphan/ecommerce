@@ -16,7 +16,7 @@ import lombok.Data;
 public class UserDto {
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{username.notBlank}")
   @Size(max = 32, message = "{string.maxSize32}")
   private String username;
 

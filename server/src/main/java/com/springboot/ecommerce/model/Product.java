@@ -30,12 +30,12 @@ public class Product {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{name.notBlank}")
   @Size(max = 100, message = "{string.maxSize100}")
   @Column(length = 100, nullable = false, unique = true)
   private String name;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{slug.notBlank}")
   @Size(max = 200, message = "{string.maxSize100}")
   @Column(length = 200, nullable = false, unique = true)
   private String slug;
@@ -44,12 +44,12 @@ public class Product {
   @Column(length = 1000)
   private String description;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{img.notBlank}")
   @Size(max = 2000, message = "{string.maxSize2000}")
   @Column(name = "img_default", length = 2000, nullable = false)
   private String imgDefault;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{active.notBlank}")
   @Column(columnDefinition = "boolean default false", nullable = false)
   private Boolean active = false;
 

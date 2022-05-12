@@ -26,7 +26,7 @@ public class Attribute {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{name.notBlank}")
   @Size(max = 50, message = "{string.maxSize50}")
   @Column(length = 50, nullable = false, unique = true)
   private String name;

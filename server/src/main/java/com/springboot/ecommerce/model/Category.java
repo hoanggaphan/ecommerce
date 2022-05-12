@@ -27,12 +27,12 @@ public class Category {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{name.notBlank}")
   @Size(max = 50, message = "{string.maxSize50}")
   @Column(length = 50, nullable = false, unique = true)
   private String name;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{slug.notBlank}")
   @Size(max = 100, message = "{string.maxSize100}")
   @Column(length = 100, nullable = false, unique = true)
   private String slug;
@@ -41,7 +41,7 @@ public class Category {
   @Column(length = 1000)
   private String description;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{img.notBlank}")
   @Size(max = 2000, message = "{string.maxSize2000}")
   @Column(length = 2000, nullable = false)
   private String img;

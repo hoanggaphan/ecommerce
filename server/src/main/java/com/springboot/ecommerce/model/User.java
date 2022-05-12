@@ -38,12 +38,12 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{username.notBlank}")
   @Size(max = 32, message = "{string.maxSize32}")
   @Column(length = 32, nullable = false, unique = true)
   private String username;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{password.notBlank}")
   @Column(nullable = false)
   private String password;
 
@@ -85,12 +85,6 @@ public class User {
   @ToString.Exclude
   @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Collection<Role> roles;
-
-  // @NotNull(message = "field.notBlank")
-  // @Column(length = 10, columnDefinition = "varchar(10) default 'user'",
-  // nullable = false)
-  // @Enumerated(EnumType.STRING)
-  // private Role role = Role.user;
 
   // 1 user có nhiều đơn đặt hàng
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

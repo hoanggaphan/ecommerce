@@ -9,7 +9,7 @@ import lombok.Data;
 public class AttributeDto {
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{name.notBlank}")
   @Size(max = 50, message = "{string.maxSize50}")
   private String name;
 }

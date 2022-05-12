@@ -38,20 +38,20 @@ public class Order {
   @Column(name = "order_id")
   private Long id;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{shipCost.notBlank}")
   @Column(name = "ship_cost", nullable = false)
   private double shipCost;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{totalPrice.notBlank}")
   @Column(name = "total_price", nullable = false)
   private double totalPrice;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{orderDateTime.notBlank}")
   @Column(name = "order_date", nullable = false)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime orderDateTime;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{status.notBlank}")
   @Column(columnDefinition = "varchar(20) default 'pending'", nullable = false)
   private Status status = Status.pending;
 

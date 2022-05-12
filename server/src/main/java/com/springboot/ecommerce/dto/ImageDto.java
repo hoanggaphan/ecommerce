@@ -9,7 +9,7 @@ import lombok.Data;
 public class ImageDto {
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{url.notBlank}")
   @Size(max = 2000, message = "{string.maxSize2000}")
   private String url;
 }

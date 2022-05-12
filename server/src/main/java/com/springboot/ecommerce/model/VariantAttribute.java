@@ -36,7 +36,7 @@ public class VariantAttribute {
   @JoinColumn(name = "attribute_id")
   private Attribute attribute;
 
-  @NotBlank(message = "field.notBlank")
+  @NotBlank(message = "value.notBlank")
   @Size(max = 50, message = "string.maxSize50")
   @Column(length = 50, nullable = false)
   private String value;

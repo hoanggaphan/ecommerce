@@ -14,21 +14,21 @@ import lombok.Data;
 public class ProductDto {
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{name.notBlank}")
   @Size(max = 100, message = "{string.maxSize100}")
   private String name;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{slug.notBlank}")
   @Size(max = 100, message = "{string.maxSize100}")
   private String slug;
 
   private String description;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{img.notBlank}")
   @Size(max = 2000, message = "{string.maxSize2000}")
   private String imgDefault;
 
-  @NotNull(message = "{field.notBlank}")
+  @NotNull(message = "{active.notBlank}")
   private Boolean active;
 
   private CategoryDto category;

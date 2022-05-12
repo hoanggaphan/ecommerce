@@ -26,7 +26,7 @@ public class Image {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{url.notBlank}")
   @Size(max = 2000, message = "{string.maxSize2000}")
   @Column(length = 2000, nullable = false)
   private String url;

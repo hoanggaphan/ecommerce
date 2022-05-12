@@ -7,10 +7,10 @@ import lombok.Data;
 
 @Data
 public class UserPassDto {
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{username.notBlank}")
   @Size(max = 32, message = "{string.maxSize32}")
   private String username;
 
-  @NotBlank(message = "{field.notBlank}")
+  @NotBlank(message = "{password.notBlank}")
   private String password;
 }
