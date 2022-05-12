@@ -21,10 +21,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
   private final ProductRepository productRepository;
@@ -91,24 +93,12 @@ public class ProductServiceImpl implements ProductService {
     if (optionalProductName.isPresent()) {
       throw new ResourceAlreadyExistException("Product", "name", product.getName());
     }
-
-    if (product.getImages() != null) {
-      // throw new ImageNullException();
-      List<Image> images = new ArrayList<>();
-      for (Image imgItem : product.getImages()) {
-        Image image = new Image();
-        image.setUrl(imgItem.getUrl());
-        image.setProduct(product);
-        images.add(image);
-      }
-      product.setImages(images);
-    }
-
+    // check img existing
     return productRepository.save(product);
   }
 
   public Product updateProduct(Long id, Product product) {
-    productRepository.findById(id)
+    Product productInDB = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
 
     Optional<Product> optionalProductSlug = productRepository.findBySlugIgnoreCaseAndIdNot(product.getSlug(),
@@ -131,10 +121,13 @@ public class ProductServiceImpl implements ProductService {
     // Update images
     List<Image> images = new ArrayList<>();
     for (Image imgItem : product.getImages()) {
-      imgItem.setProduct(product);
-      images.add(imgItem);
+    imgItem.setProduct(product);
+    images.add(imgItem);
     }
     product.setImages(images);
+
+    // productInDB.getImages().clear();
+    // productInDB.getImages().addAll(product.getImages());
 
     product.setId(id);
 
