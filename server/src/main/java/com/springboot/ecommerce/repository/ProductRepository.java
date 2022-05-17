@@ -1,7 +1,5 @@
 package com.springboot.ecommerce.repository;
 
-import java.util.Optional;
-
 import com.springboot.ecommerce.model.Product;
 
 import org.springframework.data.domain.Page;
@@ -9,13 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-  Optional<Product> findBySlugIgnoreCase(String slug);
+  Product findBySlugIgnoreCase(String slug);
 
-  Optional<Product> findByNameIgnoreCase(String name);
+  Product findByNameIgnoreCase(String name);
 
-  Optional<Product> findBySlugIgnoreCaseAndIdNot(String slug, Long id);
+  Product findBySlugIgnoreCaseAndSlugNot(String fieldValue, String slug);
 
-  Optional<Product> findByNameIgnoreCaseAndIdNot(String name, Long id);
+  Product findByNameIgnoreCaseAndSlugNot(String fieldValue, String name);
 
   Page<Product> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
 

@@ -36,5 +36,5 @@ public class ProductDto {
   @JsonIgnoreProperties("product")
   private Collection<VariantDto> variants;
 
-  private Collection<ImageDto> images;
+  private String[] images;
 }

@@ -15,6 +15,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.vladmihalcea.hibernate.type.json.JsonType;
+
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +30,10 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TypeDef(
+name = "json",
+typeClass = JsonType.class
+)
 public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,8 +76,6 @@ public class Product {
   private Collection<Variant> variants;
 
   // 1 product có nhiều image
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  @EqualsAndHashCode.Exclude
-  @ToString.Exclude
-  private Collection<Image> images;
+  @Type(type = "json")
+  private String[] images;
 }

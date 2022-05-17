@@ -14,7 +14,7 @@ public interface ProductService {
 
   public Product createProduct(Product product);
 
-  public Product updateProduct(Long id, Product product);
+  public Product updateProduct(String slug, Product product);
 
   public void deleteProduct(Long id);
 }

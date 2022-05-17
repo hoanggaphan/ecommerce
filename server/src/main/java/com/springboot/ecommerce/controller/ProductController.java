@@ -75,13 +75,13 @@ public class ProductController {
     return new ResponseEntity<ProductDto>(productRes, HttpStatus.CREATED);
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long id,
+  @PutMapping("/{slug}")
+  public ResponseEntity<ProductDto> updateProduct(@PathVariable("slug") String slug,
       @Valid @RequestBody ProductDto productDto) {
     // convert DTO to entity
     Product productReq = modelMapper.map(productDto, Product.class);
 
-    Product product = productService.updateProduct(id, productReq);
+    Product product = productService.updateProduct(slug, productReq);
 
     // convert entity to DTO
     ProductDto productRes = modelMapper.map(product, ProductDto.class);

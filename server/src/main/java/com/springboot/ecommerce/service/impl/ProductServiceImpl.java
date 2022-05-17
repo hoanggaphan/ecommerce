@@ -1,17 +1,13 @@
 package com.springboot.ecommerce.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.springboot.ecommerce.dto.ProductDto;
-import com.springboot.ecommerce.exception.MessageInternalException;
 import com.springboot.ecommerce.exception.ResourceAlreadyExistException;
 import com.springboot.ecommerce.exception.ResourceNotFoundException;
-import com.springboot.ecommerce.model.Image;
 import com.springboot.ecommerce.model.Product;
 import com.springboot.ecommerce.repository.ProductRepository;
 import com.springboot.ecommerce.service.ProductService;
@@ -21,12 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
   private final ProductRepository productRepository;
@@ -71,66 +65,50 @@ public class ProductServiceImpl implements ProductService {
   }
 
   public Product getProduct(String slug) {
-    Optional<Product> optionalProduct = productRepository.findBySlugIgnoreCase(slug);
+    Product product = productRepository.findBySlugIgnoreCase(slug);
 
-    if (optionalProduct.isPresent()) {
-      return optionalProduct.get();
-    } else {
+    if (product == null) {
       throw new ResourceNotFoundException("Product", "slug", slug);
     }
 
+    return product;
   }
 
   public Product createProduct(Product product) {
-    Optional<Product> optionalProductSlug = productRepository.findBySlugIgnoreCase(product.getSlug());
+    Product productSlug = productRepository.findBySlugIgnoreCase(product.getSlug());
 
-    if (optionalProductSlug.isPresent()) {
+    if (productSlug != null) {
       throw new ResourceAlreadyExistException("Product", "slug", product.getSlug());
     }
 
-    Optional<Product> optionalProductName = productRepository.findByNameIgnoreCase(product.getName());
-
-    if (optionalProductName.isPresent()) {
+    Product productName = productRepository.findByNameIgnoreCase(product.getName());
+    if (productName != null) {
       throw new ResourceAlreadyExistException("Product", "name", product.getName());
     }
-    // check img existing
+
     return productRepository.save(product);
   }
 
-  public Product updateProduct(Long id, Product product) {
-    Product productInDB = productRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+  public Product updateProduct(String slug, Product product) {
+    // Use Route Param to check product in db
+    Product productInDB = productRepository.findBySlugIgnoreCase(slug);
+    if (productInDB == null) {
+      throw new ResourceNotFoundException("Product", "slug", slug);
+    }
 
-    Optional<Product> optionalProductSlug = productRepository.findBySlugIgnoreCaseAndIdNot(product.getSlug(),
-        id);
-
-    if (optionalProductSlug.isPresent()) {
+    // Check field slug is already existing in db
+    Product productSlug = productRepository.findBySlugIgnoreCaseAndSlugNot(product.getSlug(), slug);
+    if (productSlug != null) {
       throw new ResourceAlreadyExistException("Product", "slug", product.getSlug());
     }
 
-    Optional<Product> optionalProductName = productRepository.findByNameIgnoreCaseAndIdNot(product.getName(), id);
-
-    if (optionalProductName.isPresent()) {
+    // Check field name is already existing in db
+    Product productName = productRepository.findByNameIgnoreCaseAndSlugNot(product.getName(), slug);
+    if (productName != null) {
       throw new ResourceAlreadyExistException("Product", "name", product.getName());
     }
 
-    if (product.getImages() == null) {
-      throw new MessageInternalException("Image can't null");
-    }
-
-    // Update images
-    List<Image> images = new ArrayList<>();
-    for (Image imgItem : product.getImages()) {
-    imgItem.setProduct(product);
-    images.add(imgItem);
-    }
-    product.setImages(images);
-
-    // productInDB.getImages().clear();
-    // productInDB.getImages().addAll(product.getImages());
-
-    product.setId(id);
-
+    product.setId(productInDB.getId());
     return productRepository.save(product);
   }
 
