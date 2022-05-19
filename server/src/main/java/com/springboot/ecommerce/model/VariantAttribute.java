@@ -1,6 +1,5 @@
 package com.springboot.ecommerce.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -26,12 +25,12 @@ public class VariantAttribute {
   @EmbeddedId
   private VariantAttributeId ids;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @MapsId("variantId")
   @JoinColumn(name = "variant_id")
   private Variant variant;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @MapsId("attributeId")
   @JoinColumn(name = "attribute_id")
   private Attribute attribute;

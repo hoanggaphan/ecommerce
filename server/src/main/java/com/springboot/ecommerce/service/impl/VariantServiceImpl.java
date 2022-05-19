@@ -17,11 +17,13 @@ import com.springboot.ecommerce.repository.VariantRepository;
 import com.springboot.ecommerce.service.VariantService;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VariantServiceImpl implements VariantService {
   private final VariantRepository variantRepository;
   private final ProductRepository productRepository;
@@ -47,16 +49,15 @@ public class VariantServiceImpl implements VariantService {
       List<VariantAttribute> optionsList = new ArrayList<>();
 
       for (VariantAttribute option : variant.getOptions()) {
-        Optional<Attribute> optAttr = attributeRepository.findById(option.getIds().getAttributeId());
+        Optional<Attribute> attrInDB = attributeRepository.findById(option.getIds().getAttributeId());
 
-        if (!optAttr.isPresent()) {
+        if (!attrInDB.isPresent()) {
           throw new MessageInternalException("Id not valid!");
         }
 
         option.setVariant(variant);
-        option.setAttribute(optAttr.get());
+        option.setAttribute(attrInDB.get());
         optionsList.add(option);
-        variant.setOptions(optionsList);
       }
 
       variant.setOptions(optionsList);
@@ -74,9 +75,8 @@ public class VariantServiceImpl implements VariantService {
     variantRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Variant", "id", id));
 
-    Optional<Variant> optVariantSku = variantRepository.findBySkuIgnoreCaseAndIdNot(variant.getSku(), id);
-
-    if (optVariantSku.isPresent()) {
+    Variant sku = variantRepository.findBySkuIgnoreCaseAndIdNot(variant.getSku(), id);
+    if (sku != null) {
       throw new ResourceAlreadyExistException("Variant", "name", variant.getSku());
     }
 
@@ -85,7 +85,7 @@ public class VariantServiceImpl implements VariantService {
 
       for (VariantAttribute option : variant.getOptions()) {
         Long variantId = option.getIds().getVariantId();
-        if (id != variantId) {
+        if (variantId != null && id != variantId) {
           throw new MessageInternalException("Id not valid!");
         }
 
@@ -98,7 +98,6 @@ public class VariantServiceImpl implements VariantService {
         option.setVariant(variant);
         option.setAttribute(optAttr.get());
         optionsList.add(option);
-        variant.setOptions(optionsList);
       }
 
       variant.setOptions(optionsList);
@@ -106,9 +105,7 @@ public class VariantServiceImpl implements VariantService {
 
     Product productInDB = productRepository.findById(variant.getProduct().getId())
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", variant.getProduct().getId()));
-
     variant.setProduct(productInDB);
-
     variant.setId(id);
     return variantRepository.save(variant);
   }

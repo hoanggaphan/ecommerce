@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VariantRepository extends JpaRepository<Variant, Long> {
   Optional<Variant> findBySkuIgnoreCase(String slug);
 
-  Optional<Variant> findBySkuIgnoreCaseAndIdNot(String sku, Long id);
+  Variant findBySkuIgnoreCaseAndIdNot(String sku, Long id);
 }

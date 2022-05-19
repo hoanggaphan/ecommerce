@@ -54,7 +54,7 @@ public class Variant {
   @ToString.Exclude
   private Product product;
 
-  @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL, orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private Collection<VariantAttribute> options;
