@@ -20,6 +20,9 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.springboot.ecommerce.enums.Status;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,7 +51,8 @@ public class Order {
 
   @NotNull(message = "{orderDateTime.notBlank}")
   @Column(name = "order_date", nullable = false)
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(iso = ISO.DATE_TIME)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime orderDateTime;
 
   @NotNull(message = "{status.notBlank}")

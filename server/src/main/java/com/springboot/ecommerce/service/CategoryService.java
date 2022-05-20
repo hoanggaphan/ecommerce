@@ -11,7 +11,7 @@ public interface CategoryService {
 
   public Category getCategory(Long id);
 
-  public Collection<Product> getCategoryProducts(String slug);
+  public Collection<Product> getCategoryBySlug(String slug);
 
   public Category createCategory(Category category);
 

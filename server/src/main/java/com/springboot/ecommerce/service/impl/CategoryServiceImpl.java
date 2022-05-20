@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
         .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
   }
 
-  public Collection<Product> getCategoryProducts(String slug) {
+  public Collection<Product> getCategoryBySlug(String slug) {
     Optional<Category> optionalCategory = categoryRepository.findBySlug(slug);
 
     if (optionalCategory.isPresent()) {

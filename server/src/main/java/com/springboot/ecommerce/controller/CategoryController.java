@@ -46,8 +46,8 @@ public class CategoryController {
   }
 
   @GetMapping("/{slug}/products")
-  public List<ProductDto> getCategoryProducts(@PathVariable("slug") String slug) {
-    return CategoryService.getCategoryProducts(slug).stream()
+  public List<ProductDto> getCategoryBySlug(@PathVariable("slug") String slug) {
+    return CategoryService.getCategoryBySlug(slug).stream()
         .map(product -> modelMapper.map(product, ProductDto.class))
         .collect(Collectors.toList());
   }

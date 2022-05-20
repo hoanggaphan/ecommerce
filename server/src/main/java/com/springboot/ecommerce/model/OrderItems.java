@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "order_items")
 public class OrderItems {
   @EmbeddedId
-  private OrderItemsId ids;
+  private OrderItemsId ids = new OrderItemsId();
 
   @ManyToOne
   @MapsId("orderId")
