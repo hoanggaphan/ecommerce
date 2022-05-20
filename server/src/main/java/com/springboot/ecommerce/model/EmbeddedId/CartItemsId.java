@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class CartItemsId implements Serializable {
   @Column(name = "user_id")
-  private Long cartId;
+  private Long userId;
 
   @Column(name = "variant_id")
   private Long variantId;

@@ -17,13 +17,11 @@ import com.springboot.ecommerce.repository.VariantRepository;
 import com.springboot.ecommerce.service.VariantService;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class VariantServiceImpl implements VariantService {
   private final VariantRepository variantRepository;
   private final ProductRepository productRepository;

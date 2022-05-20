@@ -1,6 +1,5 @@
 package com.springboot.ecommerce.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -25,12 +24,12 @@ public class OrderItems {
   @EmbeddedId
   private OrderItemsId ids;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @MapsId("orderId")
   @JoinColumn(name = "order_id")
   private Order order;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @MapsId("variantId")
   @JoinColumn(name = "variant_id")
   private Variant variant;

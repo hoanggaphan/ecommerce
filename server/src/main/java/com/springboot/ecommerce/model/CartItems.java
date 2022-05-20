@@ -1,6 +1,5 @@
 package com.springboot.ecommerce.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -29,12 +28,12 @@ public class CartItems {
   @Column(nullable = false)
   private int qty;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @MapsId("userId")
   @JoinColumn(name = "user_id")
   private User user;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @MapsId("variantId")
   @JoinColumn(name = "variant_id")
   private Variant variant;
