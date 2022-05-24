@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import javax.validation.constraints.NotNull;
 
+import com.springboot.ecommerce.enums.Status;
+
 import lombok.Data;
 
 @Data
@@ -19,6 +21,9 @@ public class OrderDto {
 
   @NotNull(message = "{orderDateTime.notBlank}")
   private LocalDateTime orderDateTime;
+
+  @NotNull(message = "{status.notBlank}")
+  private Status status;
 
   private Long userId;
 

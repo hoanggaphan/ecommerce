@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.springboot.ecommerce.dto.OrderDto;
+import com.springboot.ecommerce.dto.OrderStatusDto;
 import com.springboot.ecommerce.model.Order;
 import com.springboot.ecommerce.service.OrderService;
 
@@ -56,13 +57,12 @@ public class OrderController {
     return new ResponseEntity<OrderDto>(res, HttpStatus.CREATED);
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<OrderDto> updateOrder(@PathVariable("id") Long id,
-      @Valid @RequestBody OrderDto orderDto) {
-    // convert DTO to entity
-    Order req = modelMapper.map(orderDto, Order.class);
+  @PutMapping("/update-status/{id}")
+  public ResponseEntity<OrderDto> updateStatus(@PathVariable("id") Long id,
+      @Valid @RequestBody OrderStatusDto status) {
+    Order orderInDB = orderService.getOrder(id);
 
-    Order order = orderService.updateOrder(id, req);
+    Order order = orderService.updateStatus(id, orderInDB, status);
 
     // convert entity to DTO
     OrderDto res = modelMapper.map(order, OrderDto.class);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.springboot.ecommerce.dto.OrderStatusDto;
 import com.springboot.ecommerce.enums.Status;
 import com.springboot.ecommerce.exception.MessageInternalException;
 import com.springboot.ecommerce.exception.ResourceNotFoundException;
@@ -70,9 +71,10 @@ public class OrderServiceImpl implements OrderService {
     return orderRepository.save(order);
   }
 
-  public Order updateOrder(Long id, Order order) {
+  public Order updateStatus(Long id, Order order, OrderStatusDto status) {
     log.info("Updating order with id: {}", id);
     order.setId(id);
+    order.setStatus(status.getStatus());
     return orderRepository.save(order);
   }
 
