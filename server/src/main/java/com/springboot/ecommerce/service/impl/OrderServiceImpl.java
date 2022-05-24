@@ -45,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
   public Order createOrder(Order order) {
     log.info("Saving new order to the database");
 
+    double totalPrice = order.getShipCost();
+
     User userInDB = userRepository.findById(order.getUser().getId())
         .orElseThrow(() -> new ResourceNotFoundException("Order", "userId", order.getUser().getId()));
     order.setUser(userInDB);
@@ -60,11 +62,16 @@ public class OrderServiceImpl implements OrderService {
           throw new MessageInternalException("Id not valid!");
         }
 
+        // Tính toán số tiền đặt hàng dựa vào thông tin trong DB
+        totalPrice += (variantInDB.get().getOriginalPrice() * orderItem.getQty());
+        orderItem.setOrderedPrice(variantInDB.get().getOriginalPrice());
+
         orderItem.setVariant(variantInDB.get());
         orderItem.setOrder(order);
         orderItems.add(orderItem);
       }
 
+      order.setTotalPrice(totalPrice);
       order.setOrderItems(orderItems);
     }
 
@@ -72,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   public Order updateStatus(Long id, Order order, OrderStatusDto status) {
-    log.info("Updating order with id: {}", id);
+    log.info("Updating status of order with id: {}", id);
     order.setId(id);
     order.setStatus(status.getStatus());
     return orderRepository.save(order);
@@ -82,5 +89,4 @@ public class OrderServiceImpl implements OrderService {
     log.info("Deleting order with id: {}", id);
     orderRepository.deleteById(id);
   }
-
 }
