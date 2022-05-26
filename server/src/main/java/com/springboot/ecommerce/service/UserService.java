@@ -2,6 +2,7 @@ package com.springboot.ecommerce.service;
 
 import java.util.List;
 
+import com.springboot.ecommerce.dto.CartItemsDto;
 import com.springboot.ecommerce.model.Role;
 import com.springboot.ecommerce.model.User;
 
@@ -19,4 +20,6 @@ public interface UserService {
   public Role createRole(Role role);
 
   public void addRoleToUser(String username, String roleName);
+
+  public List<CartItemsDto> addItemToCart(String username, Long variantId, String qty);
 }

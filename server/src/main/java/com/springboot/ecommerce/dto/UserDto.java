@@ -44,4 +44,6 @@ public class UserDto {
   private Gender gender;
 
   private Collection<Role> roles;
+
+  private Collection<CartItemsDto> cartItems;
 }

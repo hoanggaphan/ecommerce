@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "cart_items")
 public class CartItems {
   @EmbeddedId
-  private CartItemsId ids;
+  private CartItemsId ids = new CartItemsId();
 
   @NotNull(message = "qty.notBlank")
   @Column(nullable = false)

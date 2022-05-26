@@ -14,6 +14,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.springboot.ecommerce.dto.CartItemsDto;
 import com.springboot.ecommerce.dto.UserDto;
 import com.springboot.ecommerce.dto.UserPassDto;
 import com.springboot.ecommerce.model.Role;
@@ -99,8 +100,8 @@ public class UserController {
   }
 
   @PostMapping("/v1/roles/add-to-user")
-  public ResponseEntity<?> addRoleToUser(@Valid @RequestBody RoleToUserForm form) {
-    userService.addRoleToUser(form.getUsername(), form.getRoleName());
+  public ResponseEntity<?> addRoleToUser(@Valid @RequestBody RoleToUserJson json) {
+    userService.addRoleToUser(json.getUsername(), json.getRoleName());
     return ResponseEntity.ok().build();
   }
 
@@ -147,10 +148,22 @@ public class UserController {
       throw new RuntimeException("Refresh token is missing");
     }
   }
+
+  @PostMapping("/v1/cart/add")
+  public List<CartItemsDto> addItemToCart(@Valid @RequestBody ItemToCartJson json) {
+    return userService.addItemToCart(json.getUsername(), json.getVariantId(), json.getQty());
+  }
 }
 
 @Data
-class RoleToUserForm {
+class RoleToUserJson {
   private String username;
   private String roleName;
+}
+
+@Data
+class ItemToCartJson {
+  private String username;
+  private Long variantId;
+  private String qty;
 }
