@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.springboot.ecommerce.dto.CartItemsDto;
-import com.springboot.ecommerce.exception.MessageInternalException;
 import com.springboot.ecommerce.exception.ResourceAlreadyExistException;
 import com.springboot.ecommerce.exception.ResourceNotFoundException;
 import com.springboot.ecommerce.model.CartItems;
@@ -34,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -101,6 +99,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     return roleRepo.save(role);
   }
 
+  @Transactional
   public void addRoleToUser(String username, String roleName) {
     log.info("Adding role {} to user {}", roleName, username);
     User user = userRepo.findByUsername(username);
@@ -112,18 +111,41 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     user.getRoles().add(role);
   }
 
-  public List<CartItemsDto> addItemToCart(String username, Long variantId, String qty) {
-    log.info("Adding variant id {} to cart of user {}", variantId, username);
+  @Transactional
+  public List<CartItemsDto> addCart(String username, List<CartItemsDto> CartItemsDto) {
+    log.info("Adding cart for user {}", username);
 
-    int newQty;
-    try {
-      newQty = Integer.parseInt(qty);
-    } catch (Exception e) {
-      throw new MessageInternalException("qty not valid!");
-    }
+    // Check User in DB
+    User user = userRepo.findByUsername(username);
+    if (user == null)
+      throw new ResourceNotFoundException("User", "username", username);
 
-    if (newQty <= 0)
-      throw new MessageInternalException("qty not valid!");
+    List<CartItems> cartItems = CartItemsDto.stream().map(cartItem -> {
+      return modelMapper.map(cartItem, CartItems.class);
+    }).collect(Collectors.toList());
+
+    // Check item valid in cart
+    cartItems.stream().forEach(
+        (cartItem) -> {
+          // Check Variant in DB
+          Variant variant = variantService.getVariant(cartItem.getVariant().getId());
+          cartItem.setUser(user);
+          cartItem.setVariant(variant);
+        });
+
+    user.getCartItems().clear();
+    userRepo.flush();
+    user.getCartItems().addAll(cartItems);
+
+    // Trả về giỏ hàng mới của user
+    return user.getCartItems().stream()
+        .map(cartItem -> modelMapper.map(cartItem, CartItemsDto.class))
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public List<CartItemsDto> updateCart(String username, Long variantId, Integer qty) {
+    log.info("Updating cart of user {}", username);
 
     // Check User in DB
     User user = userRepo.findByUsername(username);
@@ -138,19 +160,46 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     ids.setVariantId(variant.getId());
     Optional<CartItems> optItem = cartItemsRepo.findById(ids);
 
-    // Nếu trong giỏ hàng user tồn tại sp thì +1, ngược lại thêm mới id sp vào giỏ.
+    // Nếu trong giỏ hàng tồn tại sp thì cập nhật số lượng, ngược lại thêm mới sp
+    // vào giỏ.
     if (optItem.isPresent()) {
       CartItems item = optItem.get();
-      item.setQty(newQty);
+      item.setQty(qty);
       cartItemsRepo.save(item);
     } else {
       CartItems newItem = new CartItems();
-      newItem.setQty(newQty);
+      newItem.setQty(qty);
       newItem.setUser(user);
       newItem.setVariant(variant);
       user.getCartItems().add(newItem);
     }
 
+    // Trả về giỏ hàng mới của user
+    return user.getCartItems().stream()
+        .map(cartItem -> modelMapper.map(cartItem, CartItemsDto.class))
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public List<CartItemsDto> removeItemFromCart(String username, Long variantId) {
+    log.info("Removing variant id {} from cart of user {}", variantId, username);
+    // Check User in DB
+    User user = userRepo.findByUsername(username);
+    if (user == null)
+      throw new ResourceNotFoundException("User", "username", username);
+
+    // Check Variant in DB
+    Variant variant = variantService.getVariant(variantId);
+
+    CartItemsId ids = new CartItemsId();
+    ids.setUserId(user.getId());
+    ids.setVariantId(variant.getId());
+    Optional<CartItems> optItem = cartItemsRepo.findById(ids);
+
+    // Loại bỏ sp tìm dc khỏi giỏ hàng.
+    user.getCartItems().remove(optItem.get());
+
+    // Trả về giỏ hàng mới của user
     return user.getCartItems().stream()
         .map(cartItem -> modelMapper.map(cartItem, CartItemsDto.class))
         .collect(Collectors.toList());

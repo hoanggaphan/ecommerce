@@ -11,7 +11,7 @@ import lombok.Data;
 public class VariantAttributeDto {
   private VariantAttributeId ids;
 
-  @NotBlank(message = "value.notBlank")
-  @Size(max = 50, message = "string.maxSize50")
+  @NotBlank(message = "{value.notBlank}")
+  @Size(max = 50, message = "{string.maxSize50}")
   private String value;
 }

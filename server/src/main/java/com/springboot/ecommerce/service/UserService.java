@@ -21,5 +21,9 @@ public interface UserService {
 
   public void addRoleToUser(String username, String roleName);
 
-  public List<CartItemsDto> addItemToCart(String username, Long variantId, String qty);
+  public List<CartItemsDto> addCart(String username, List<CartItemsDto> cartItems);
+
+  public List<CartItemsDto> updateCart(String username, Long variantId, Integer qty);
+
+  public List<CartItemsDto> removeItemFromCart(String username, Long variantId);
 }

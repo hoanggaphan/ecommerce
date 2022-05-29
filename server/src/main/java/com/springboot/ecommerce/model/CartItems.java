@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.springboot.ecommerce.model.EmbeddedId.CartItemsId;
 
@@ -24,9 +25,10 @@ public class CartItems {
   @EmbeddedId
   private CartItemsId ids = new CartItemsId();
 
-  @NotNull(message = "qty.notBlank")
+  @NotNull(message = "{qty.notBlank}")
+  @Positive(message = "{qty.positive}")
   @Column(nullable = false)
-  private int qty;
+  private Integer qty;
 
   @ManyToOne
   @MapsId("userId")

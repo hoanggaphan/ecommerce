@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -150,20 +152,49 @@ public class UserController {
   }
 
   @PostMapping("/v1/cart/add")
-  public List<CartItemsDto> addItemToCart(@Valid @RequestBody ItemToCartJson json) {
-    return userService.addItemToCart(json.getUsername(), json.getVariantId(), json.getQty());
+  public List<CartItemsDto> addCart(@Valid @RequestBody addCartJson json) {
+    return userService.addCart(json.getUsername(), json.getCartItems());
+  }
+
+  @PostMapping("/v1/cart/update")
+  public List<CartItemsDto> updateCart(@Valid @RequestBody updateCartJson json) {
+    return userService.updateCart(json.getUsername(), json.getVariantId(), json.getQty());
+  }
+
+  @PostMapping("/v1/cart/remove")
+  public List<CartItemsDto> removeItemFromCart(@Valid @RequestBody removeItemFromCartJson json) {
+    return userService.removeItemFromCart(json.getUsername(), json.getVariantId());
   }
 }
 
 @Data
 class RoleToUserJson {
+  @NotNull(message = "{name.notBlank}")
   private String username;
+  @NotNull(message = "{role.notBlank}")
   private String roleName;
 }
 
 @Data
-class ItemToCartJson {
+class addCartJson {
+  @NotNull(message = "{name.notBlank}")
+  private String username;
+  private List<@Valid CartItemsDto> cartItems;
+}
+
+@Data
+class updateCartJson {
+  @NotNull(message = "{name.notBlank}")
   private String username;
   private Long variantId;
-  private String qty;
+  @NotNull(message = "{qty.notBlank}")
+  @Positive(message = "{qty.positive}")
+  private Integer qty;
+}
+
+@Data
+class removeItemFromCartJson {
+  @NotNull(message = "{name.notBlank}")
+  private String username;
+  private Long variantId;
 }

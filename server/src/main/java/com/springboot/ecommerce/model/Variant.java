@@ -41,7 +41,7 @@ public class Variant {
 
   @NotNull(message = "{qty.notBlank}")
   @Column(columnDefinition = "integer default 0", nullable = false)
-  private int qty = 0;
+  private Integer qty = 0;
 
   @NotNull(message = "{isDefault.notBlank}")
   @Column(name = "is_default", columnDefinition = "boolean default false", nullable = false)

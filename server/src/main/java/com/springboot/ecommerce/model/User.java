@@ -92,7 +92,7 @@ public class User {
   @ToString.Exclude
   private Collection<Order> orders;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private Collection<CartItems> cartItems;

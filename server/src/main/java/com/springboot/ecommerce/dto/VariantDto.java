@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -22,7 +23,8 @@ public class VariantDto {
   private double originalPrice;
 
   @NotNull(message = "{qty.notBlank}")
-  private int qty;
+  @Positive(message = "{qty.positive}")
+  private Integer qty;
 
   @NotNull(message = "{isDefault.notBlank}")
   private Boolean isDefault;
