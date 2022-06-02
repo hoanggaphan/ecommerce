@@ -1,21 +1,19 @@
-package com.springboot.ecommerce.filter;
+package com.springboot.ecommerce.jwt;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.ecommerce.dto.UserPassDto;
+import com.springboot.ecommerce.model.CustomUserDetails;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,18 +21,19 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-  private final AuthenticationManager authenticationManager;
+  @Autowired
+  private JwtProvider jwtProvider;
 
-  public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
-    this.authenticationManager = authenticationManager;
+  @Override
+  @Autowired
+  public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+    super.setAuthenticationManager(authenticationManager);
   }
 
   // Xác thực đăng nhập
@@ -53,31 +52,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     log.info("Username logging is: {}", username);
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
         password);
-    return authenticationManager.authenticate(authenticationToken);
+    return this.getAuthenticationManager().authenticate(authenticationToken);
   }
 
   // Đăng nhập thành công
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
       Authentication authResult) throws IOException, ServletException {
-    User user = (User) authResult.getPrincipal();
-    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-
-    String access_token = JWT.create()
-        .withSubject(user.getUsername())
-        .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // 10 phút
-        .withIssuer(request.getRequestURI().toString())
-        .withClaim("roles",
-            user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-        .sign(algorithm);
-    String refresh_token = JWT.create()
-        .withSubject(user.getUsername())
-        .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // 30 phút
-        .withIssuer(request.getRequestURI().toString())
-        .sign(algorithm);
+    CustomUserDetails user = (CustomUserDetails) authResult.getPrincipal();
+    String access_token = jwtProvider.generateAccessToken(user, request);
+    String refresh_token = jwtProvider.generateRefreshToken(user, request);
 
     log.info("Logging Success");
-
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding("UTF-8");
     response.getWriter().write(new JSONObject()

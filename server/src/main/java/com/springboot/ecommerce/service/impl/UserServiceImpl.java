@@ -1,7 +1,5 @@
 package com.springboot.ecommerce.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,6 +8,7 @@ import com.springboot.ecommerce.dto.CartItemsDto;
 import com.springboot.ecommerce.exception.ResourceAlreadyExistException;
 import com.springboot.ecommerce.exception.ResourceNotFoundException;
 import com.springboot.ecommerce.model.CartItems;
+import com.springboot.ecommerce.model.CustomUserDetails;
 import com.springboot.ecommerce.model.Role;
 import com.springboot.ecommerce.model.User;
 import com.springboot.ecommerce.model.Variant;
@@ -21,8 +20,6 @@ import com.springboot.ecommerce.service.UserService;
 import com.springboot.ecommerce.service.VariantService;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
   private final ModelMapper modelMapper;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepo.findByUsername(username);
     if (user == null) {
       log.error("User not found in the database");
@@ -52,9 +49,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     log.info("User found in the database: {}", username);
-    Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-    user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+    return new CustomUserDetails(user);
   }
 
   public List<User> getAllUsers() {

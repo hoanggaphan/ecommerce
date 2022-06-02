@@ -1,8 +1,7 @@
 package com.springboot.ecommerce;
 
-import com.springboot.ecommerce.model.Role;
-import com.springboot.ecommerce.model.User;
-import com.springboot.ecommerce.service.UserService;
+// import com.springboot.ecommerce.filter.JwtProvider;
+// import com.springboot.ecommerce.service.UserService;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +18,7 @@ public class EcommerceApplication {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
-	private final UserService userService;
+	// private final UserService userService;
 
 	@Bean
 	CommandLineRunner run() {
